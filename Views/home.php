@@ -5,7 +5,7 @@ ini_set('display_errors', 1);
 date_default_timezone_set('Asia/Tokyo');
 // URL/ディレクトリ設定
 define('HOME_URL', '/TwitterClone/');
- 
+
 ///////////////////////////////////////
 // ツイート一覧
 ///////////////////////////////////////
@@ -33,11 +33,11 @@ $view_tweets = [
         'like_count' => 1,
     ],
 ];
- 
+
 ///////////////////////////////////////
 // 便利な関数
 ///////////////////////////////////////
- 
+
 /**
  * 画像ファイル名から画像のURLを生成
  *
@@ -50,10 +50,10 @@ function buildImagePath(string $name = null, string $type)
     if ($type === 'user' && !isset($name)) {
         return HOME_URL . 'Views/img/icon-default-user.svg';
     }
- 
+
     return HOME_URL . 'Views/img_uploaded/' . $type . '/' . htmlspecialchars($name);
 }
- 
+
 /**
  * 指定した日時からどれだけ経過したかを取得
  *
@@ -65,7 +65,7 @@ function convertToDayTimeAgo(string $datetime)
     $unix = strtotime($datetime);
     $now = time();
     $diff_sec = $now - $unix;
- 
+
     if ($diff_sec < 60) {
         $time = $diff_sec;
         $unit = '秒前';
@@ -86,16 +86,16 @@ function convertToDayTimeAgo(string $datetime)
         }
         return $time;
     }
- 
+
     return (int)$time . $unit;
 }
- 
- 
- 
+
+
+
 ?>
 <!DOCTYPE html>
 <html lang="ja">
- 
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -111,10 +111,10 @@ function convertToDayTimeAgo(string $datetime)
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous" defer></script>
     <!-- いいね！JS -->
     <script src="<?php echo HOME_URL; ?>Views/js/like.js" defer></script>
- 
+
     <title>ホーム画面 / Twitterクローン</title>
 </head>
- 
+
 <body class="home">
     <div class="container">
         <div class="side">
@@ -150,9 +150,9 @@ function convertToDayTimeAgo(string $datetime)
                     </form>
                 </div>
             </div>
- 
+
             <div class="ditch"></div>
- 
+
             <?php if (empty($view_tweets)) : ?>
                 <p class="p-3">ツイートがまだありません</p>
             <?php else : ?>
@@ -171,13 +171,13 @@ function convertToDayTimeAgo(string $datetime)
                                         <span class="user-name">@<?php echo htmlspecialchars($view_tweet['user_name']); ?> ・<?php echo convertToDayTimeAgo($view_tweet['tweet_created_at']); ?></span>
                                     </a>
                                 </div>
- 
+
                                 <p><?php echo htmlspecialchars($view_tweet['tweet_body']); ?></p>
- 
+
                                 <?php if (isset($view_tweet['tweet_image_name'])) : ?>
                                     <img src="<?php echo buildImagePath($view_tweet['tweet_image_name'], 'tweet'); ?>" alt="" class="post-image">
                                 <?php endif; ?>
- 
+
                                 <div class="icon-list">
                                     <div class="like js-like" data-like-id="<?php echo htmlspecialchars($view_tweet['like_id']); ?>">
                                         <?php
@@ -194,7 +194,7 @@ function convertToDayTimeAgo(string $datetime)
                             </div>
                         </div>
                     <?php endforeach; ?>
- 
+
                 </div>
             <?php endif; ?>
         </div>
@@ -207,5 +207,5 @@ function convertToDayTimeAgo(string $datetime)
         }, false);
     </script>
 </body>
- 
+
 </html>
