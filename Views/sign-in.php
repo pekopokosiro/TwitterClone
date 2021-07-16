@@ -15,7 +15,7 @@
  
             <?php if (isset($view_try_login_result) && $view_try_login_result === false) : ?>
                 <!-- ログインに失敗した場合 -->
-                <div class="alert alert-warning text-sm" role="alert">
+            <div class="alert alert-warning text-sm" role="alert">
                     ログインに失敗しました。メールアドレス、パスワードが正しいかご確認下さい。
                 </div>
             <?php endif; ?>
