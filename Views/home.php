@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="ja">
- 
+
 <head>
     <?php include_once('../Views/common/head.php'); ?>
     <title>ホーム画面 / Twitterクローン</title>
     <meta name="description" content="ホーム画面です">
 </head>
- 
+
 <body class="home">
     <div class="container">
         <?php include_once('../Views/common/side.php'); ?>
- 
+
         <div class="main">
             <div class="main-header">
                 <h1>ホーム</h1>
@@ -31,9 +31,9 @@
                     </form>
                 </div>
             </div>
- 
+            <!-- 仕切りエリア 自分の呟きと他人の一覧のブロックの隙間-->
             <div class="ditch"></div>
- 
+            <!-- 呟き一覧エリア -->
             <?php if (empty($view_tweets)) : ?>
                 <p class="p-3">ツイートがまだありません</p>
             <?php else : ?>
@@ -45,8 +45,8 @@
             <?php endif; ?>
         </div>
     </div>
- 
+
     <?php include_once('../Views/common/foot.php'); ?>
 </body>
- 
+
 </html>

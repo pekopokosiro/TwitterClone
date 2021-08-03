@@ -38,8 +38,7 @@ if (isset($_POST['body'])) {
         exit;
     }
 }
-
-
+ 
 // 画面表示
 $view_user = $user;
-include_once '../views/post.php';
+include_once '../Views/post.php';

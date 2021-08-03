@@ -1,0 +1,67 @@
+<?php
+///////////////////////////////////////
+// プロフィールコントローラー
+///////////////////////////////////////
+
+// 設定を読み込み
+include_once '../config.php';
+// 便利な関数を読み込み
+include_once '../util.php';
+
+// ユーザーデータ操作モデルを読み込む
+include_once '../Models/users.php';
+// ツイートデータ操作モデルを読み込む
+include_once '../Models/tweets.php';
+
+// ログインしているか
+$user = getUserSession();
+if (!$user) {
+    // ログインしていない
+    header('Location:' . HOME_URL . 'Controllers/sign-in.php');
+    exit;
+}
+
+// ユーザー情報を変更
+// ニックネームとユーザ名とメールアドレスが入力されている場合
+if (isset($_POST['nickname']) && isset($_POST['name']) && isset($_POST['email'])) {
+    $data = [
+        'id' => $user['id'],
+        'name' => $_POST['name'],
+        'nickname' => $_POST['nickname'],
+        'email' => $_POST['email'],
+    ];
+
+    if (isset($_POST['password']) && $_POST['password'] !== '') {
+        // パスワードが入力されていた場合はパスワード変更
+        $data['password'] = $_POST['password'];
+    }
+
+    if (isset($_FILES['image']) && is_uploaded_file($_FILES['image']['tmp_name'])) {
+        // ファイルがアップロードされていた場合は　画像アップロード
+        $data['image_name'] = uploadImage($user, $_FILES['image'], 'user');
+    }
+
+    // 更新実行して成功したら
+    if (updateUser($data)) {
+        // 更新後の内容をセッションに保存しなおす
+        $user = findUser($user['id']);
+        saveUserSession($user);
+        // リロード
+        header('Location: ' . HOME_URL . 'Controllers/profile.php');
+    }
+}
+
+// 表示するユーザーIDを取得（デフォルトはログインユーザー）
+//URLにuse_idがある場合、ー＞それを対象ユーザーにする。
+$requested_user_id = $user['id'];
+if (isset($_GET['user_id'])) {
+    $requested_user_id = $_GET['user_id'];
+}
+
+// 画面表示
+$view_user = $user;
+// プロフィール詳細を取得
+$view_requested_user = findUser($requested_user_id, $user['id']);
+// ツイート一覧
+$view_tweets = findTweets($user, null, [$requested_user_id]);
+include_once '../Views/profile.php';
