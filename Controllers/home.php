@@ -18,7 +18,6 @@ if (!$user) {
     header('Location:' . HOME_URL . 'Controllers/sign-in.php');
     exit;
 }
-
 // 画面表示
 $view_user = $user;
 // ツイート一覧

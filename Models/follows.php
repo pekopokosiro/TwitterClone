@@ -21,7 +21,7 @@ function createFollow(array $data)
     // ------------------------------------
     // SQLクエリを作成（新規登録）
     // ------------------------------------
-    $query = 'INSERT INTO follows (follow_user_id, followed_user_id) VALUES (?, ?)';
+    $query = 'INSERT INTO follows(follow_user_id, followed_user_id) VALUES (?, ?)';
     $statement = $mysqli->prepare($query);
  
     // プレースホルダに値をセット
