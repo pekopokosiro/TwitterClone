@@ -12,7 +12,7 @@
             </a>
         </div>
 
-        <p><?php echo htmlspecialchars($view_tweet['tweet_body']); ?></p>
+        <p><?php echo htmlspecialchars($view_tweet['tweet_body'] ); ?></p>
 
         <?php if (isset($view_tweet['tweet_image_name'])) : ?>
             <img src="<?php echo buildImagePath($view_tweet['tweet_image_name'], 'tweet'); ?>" alt="" class="post-image">

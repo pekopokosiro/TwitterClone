@@ -18,29 +18,34 @@ function createTweet(array $data)
         echo 'MySQLの接続に失敗しました。：' . $mysqli->connect_error . "\n";
         exit;
     }
- 
+
     // 新規登録のSQLクエリを作成
     $query = 'INSERT INTO tweets (user_id, body, image_name) VALUES (?, ?, ?)';
- 
+
     // プリペアドステートメントにクエリを登録
     $statement = $mysqli->prepare($query);
- 
+
     // プレースホルダにカラム値を紐付け（i=int, s=string）
     $statement->bind_param('iss', $data['user_id'], $data['body'], $data['image_name']);
- 
     // クエリを実行
     $response = $statement->execute();
     if ($response === false) {
         echo 'エラーメッセージ：' . $mysqli->error . "\n";
     }
- 
+
+    //ツイートがない場合の対処法はどうすればいいのか？下記はおしゃれじゃない
+    // if (empty($data['body'])){
+    //     echo'入力されていません';
+    //     exit;
+    // }
+
     // DB接続を解放
     $statement->close();
     $mysqli->close();
- 
+
     return $response;
 }
- 
+
 /**
  * ツイート1件取得
  *
@@ -55,15 +60,15 @@ function findTweet(int $tweet_id)
         echo 'MySQLの接続に失敗しました。：' . $mysqli->connect_error . "\n";
         exit;
     }
- 
+
     // エスケープ
     $tweet_id = $mysqli->real_escape_string($tweet_id);
- 
+
     // ------------------------------------
     // SQLクエリを作成
     // ------------------------------------
     $query = 'SELECT * FROM tweets WHERE status = "active" AND id = "' . $tweet_id . '"';
- 
+
     // ------------------------------------
     // 戻り値を作成
     // ------------------------------------
@@ -74,16 +79,16 @@ function findTweet(int $tweet_id)
         $response = false;
         echo 'エラーメッセージ：' . $mysqli->error . "\n";
     }
- 
+
     // ------------------------------------
     // 後処理
     // ------------------------------------    
     // DB接続を開放
     $mysqli->close();
- 
+
     return $response;
 }
- 
+
 /**
  * ツイート一覧を取得
  *
@@ -101,10 +106,10 @@ function findTweets(array $user, string $keyword = null, array $user_ids = null)
         echo 'MySQLの接続に失敗しました。：' . $mysqli->connect_error . "\n";
         exit;
     }
- 
+
     // ログインユーザーIDをエスケープ
     $login_user_id = $mysqli->real_escape_string($user['id']);
- 
+
     // 検索のSQLクエリを作成
     $query = <<<SQL
         SELECT
@@ -132,7 +137,7 @@ function findTweets(array $user, string $keyword = null, array $user_ids = null)
         WHERE
             T.status = 'active'
     SQL;
- 
+
     // 検索キーワードが入力されていた場合
     if (isset($keyword)) {
         // エスケープ
@@ -140,7 +145,6 @@ function findTweets(array $user, string $keyword = null, array $user_ids = null)
         // ツイート主のニックネーム・ユーザー名・本文から部分一致検索
         $query .= ' AND CONCAT(U.nickname, U.name, T.body) LIKE "%' . $keyword . '%"';
     }
- 
     // ユーザーIDが指定されている場合
     if (isset($user_ids)) {
         foreach ($user_ids as $key => $user_id) {
@@ -150,12 +154,12 @@ function findTweets(array $user, string $keyword = null, array $user_ids = null)
         // ユーザーID一覧に含まれるユーザーで絞る
         $query .= ' AND T.user_id IN (' . $user_ids_csv . ')';
     }
- 
+
     // 新しい順に並び替え
     $query .= ' ORDER BY T.created_at DESC';
     // 表示件数50件
     $query .= ' LIMIT 50';
- 
+
     // クエリ実行
     $result = $mysqli->query($query);
     if ($result) {
@@ -165,8 +169,8 @@ function findTweets(array $user, string $keyword = null, array $user_ids = null)
         $response = false;
         echo 'エラーメッセージ：' . $mysqli->error . "\n";
     }
- 
+
     $mysqli->close();
- 
+
     return $response;
 }
