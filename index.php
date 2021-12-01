@@ -1,5 +1,6 @@
 <?php
-chdir("Controllers");
-include_once('home.php');
+// chdir("Controllers");
+$Path = "./";
+include_once(dirname(__FILE__).'/Controllers/home.php');
 
 ?>
