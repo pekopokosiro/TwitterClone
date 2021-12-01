@@ -1,4 +1,5 @@
 <?php
 chdir("Controllers");
-include_once('home.php');
+// include_once('home2.php');
+echo "hello";
 ?>
